@@ -56,7 +56,6 @@ fish_config theme choose "Rosé Pine"
 
 function dots
     set DOTS /home/grey/dotfiles
-    set HOME_DOTS $DOTS/home/grey
 
     set files \
         /home/grey/.bash_profile \
@@ -91,11 +90,11 @@ function dots
 
     echo Copying dotfiles...
 
-    mkdir -p $HOME_DOTS
+    mkdir -p $DOTS
 
     for path in $files
         if test -f $path
-            cp $path $HOME_DOTS/
+            cp $path $DOTS/
         end
     end
 
@@ -128,7 +127,10 @@ function dots
     end
 
     set message "Update dotfiles "(date '+%Y-%m-%d %H:%M:%S')
-    git commit -m "$message"
+    if not git commit -m "$message"
+        echo Commit failed. Configure git user.name and user.email, then run dots again.
+        return 1
+    end
 
     if git remote get-url origin >/dev/null 2>&1
         git push
