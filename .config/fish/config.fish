@@ -127,14 +127,6 @@ function dots
     end
 
     set message "Update dotfiles "(date '+%Y-%m-%d %H:%M:%S')
-    if not git commit -m "$message"
-        echo Commit failed. Configure git user.name and user.email, then run dots again.
-        return 1
-    end
-
-    if git remote get-url origin >/dev/null 2>&1
-        git push
-    else
-        echo Dotfiles copied and committed. Add an origin remote before pushing.
-    end
+    git commit -m "$message"
+    git push
 end

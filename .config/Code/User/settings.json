@@ -1,0 +1,12 @@
+{
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+    "makefile.configureOnOpen": true,
+    "editor.cursorBlinking": "expand",
+    "C_Cpp.default.compilerPath": "/home/grey/libs/include",
+    "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+    "files.autoSave": "onFocusChange",
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.accessibilitySupport": "off",
+    "editor.allowVariableLineHeights": false,
+    "chat.viewSessions.orientation": "stacked",
+}
