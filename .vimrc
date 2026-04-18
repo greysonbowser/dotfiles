@@ -7,7 +7,6 @@ set encoding=utf-8
 filetype indent plugin on
 
 syntax on
-set number
 set wildmenu
 set smartcase
 set ignorecase
@@ -16,6 +15,22 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" enable hybrid line numbering
+set number
+set relativenumber
+
+" improve search
+set incsearch
+set hlsearch
+
+set mouse=a
+
+set clipboard=unnamedplus
+set updatetime=300
+set termguicolors
+set cursorline
+" keep a few lines visible while scrolling
+set scrolloff=5
 
 " Plugins 
 call plug#begin('~/.vim/plugged')
