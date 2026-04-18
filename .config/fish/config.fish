@@ -58,22 +58,14 @@ function dots
     set DOTS /home/grey/dotfiles
 
     set files \
-        /home/grey/.bash_profile \
-        /home/grey/.bashrc \
-        /home/grey/.gitconfig \
-        /home/grey/.npmrc \
-        /home/grey/.profile \
         /home/grey/.tmux.conf \
-        /home/grey/.vimrc \
-        /home/grey/.zshenv \
-        /home/grey/.zshrc
+        /home/grey/.vimrc
 
     set dirs \
         /home/grey/.config/fish \
         /home/grey/.config/hypr \
         /home/grey/.config/hyprpanel \
         /home/grey/.config/kitty \
-        /home/grey/.config/sherlock \
         /home/grey/.config/systemd/user \
         /home/grey/.config/vicinae \
         /home/grey/.config/wayscriber
@@ -81,12 +73,11 @@ function dots
     set extra_files \
         /home/grey/.config/MangoHud/MangoHud.conf \
         /home/grey/.config/btop/btop.conf \
+        /home/grey/.config/kitty/kitty.conf.bak \
         /home/grey/.config/micro/bindings.json \
         /home/grey/.config/micro/settings.json \
         /home/grey/.config/qutebrowser/bookmarks/urls \
-        /home/grey/.config/qutebrowser/quickmarks \
-        /home/grey/.config/Code/User/settings.json \
-        /home/grey/.config/VSCodium/User/settings.json
+        /home/grey/.config/qutebrowser/quickmarks
 
     echo Copying dotfiles...
 
