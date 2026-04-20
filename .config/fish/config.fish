@@ -121,3 +121,24 @@ function dots
     git commit -m "$message"
     git push
 end
+
+function gambitbot_start
+    set -l session gambitbot
+    set -l repo /home/grey/opening
+    set -l log $repo/runtime/lichess-bot/lichess-bot.log
+
+    tmux has-session -t $session 2>/dev/null; and tmux kill-session -t $session
+    tmux new-session -d -s $session "cd $repo && ./scripts/run_lichess_bot.sh -v 2>&1 | tee -a $log"
+    echo "Started tmux session '$session'. Attach with: tmux attach -t $session"
+end
+
+function gambitbot_stop
+    set -l session gambitbot
+    if not tmux has-session -t $session 2>/dev/null
+        echo "No '$session' tmux session running."
+        return 1
+    end
+    tmux send-keys -t $session C-c
+    echo "Sent graceful shutdown signal. Bot will finish active games then exit."
+    echo "Run again (or press Ctrl-C twice inside the session) to force-quit immediately."
+end
