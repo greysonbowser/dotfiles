@@ -125,10 +125,11 @@ end
 function gambitbot_start
     set -l session gambitbot
     set -l repo /home/grey/opening
-    set -l log $repo/runtime/lichess-bot/lichess-bot.log
 
     tmux has-session -t $session 2>/dev/null; and tmux kill-session -t $session
-    tmux new-session -d -s $session "cd $repo && ./scripts/run_lichess_bot.sh -v 2>&1 | tee -a $log"
+    tmux new-session -d -s $session "cd $repo && ./scripts/run_lichess_bot_session.sh -v"
+    tmux split-window -h -t $session "cd $repo && ./scripts/live_session_dashboard.py"
+    tmux select-layout -t $session even-horizontal
     echo "Started tmux session '$session'. Attach with: tmux attach -t $session"
 end
 
