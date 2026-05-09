@@ -17,6 +17,13 @@ function c
 	clear; fish_greeting
 end
 
+function mkdircd
+    if test (count $argv) -ne 1
+        echo "expects one arg" >&2 ## >&2 to prevent pipe error
+        return 1
+    end
+    mkdir -p $argv[1]; and cd $argv[1]
+end
 
 function scramble
     for line in (seq 1 7)
@@ -122,24 +129,20 @@ function dots
     git push
 end
 
-function gambitbot_start
-    set -l session gambitbot
-    set -l repo /home/grey/opening
+function mmrun
+    set PROJECT /home/grey/megaminx-viewer
 
-    tmux has-session -t $session 2>/dev/null; and tmux kill-session -t $session
-    tmux new-session -d -s $session "cd $repo && ./scripts/run_lichess_bot_session.sh -v"
-    tmux split-window -h -t $session "cd $repo && ./scripts/live_session_dashboard.py"
-    tmux select-layout -t $session even-horizontal
-    echo "Started tmux session '$session'. Attach with: tmux attach -t $session"
-end
-
-function gambitbot_stop
-    set -l session gambitbot
-    if not tmux has-session -t $session 2>/dev/null
-        echo "No '$session' tmux session running."
+    if not test -d $PROJECT
+        echo "Project directory not found: $PROJECT"
         return 1
     end
-    tmux send-keys -t $session C-c
-    echo "Sent graceful shutdown signal. Bot will finish active games then exit."
-    echo "Run again (or press Ctrl-C twice inside the session) to force-quit immediately."
+
+    cd $PROJECT; and cmake --build build; and begin
+        ./build/megaminx_viewer data/megaminx_spec.json > /tmp/megaminx-viewer.log 2>&1 &
+        disown
+    end
 end
+
+source ~/.config/fish/gambitbot.fish
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin $PATH /home/grey/.ghcup/bin # ghcup-env

@@ -35,6 +35,8 @@ set scrolloff=5
 " Plugins 
 call plug#begin('~/.vim/plugged')
 
+Plug 'dense-analysis/ale'
+Plug 'hasufell/ghcup.vim'
 Plug 'lervag/vimtex'
 Plug 'https://codeberg.org/ziglang/zig.vim'
 Plug 'rose-pine/vim'
@@ -48,3 +50,6 @@ colorscheme rosepine
 " Configure vimtex to use zathura
 let g:vimtex_view_method = 'zathura'
 let g:vimtex_quickfix_open_on_warning = 0
+
+" Open ghcup in buffer
+nnoremap <Leader>g :GHCup<CR>
