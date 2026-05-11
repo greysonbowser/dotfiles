@@ -53,3 +53,5 @@ let g:vimtex_quickfix_open_on_warning = 0
 
 " Open ghcup in buffer
 nnoremap <Leader>g :GHCup<CR>
+
+let g:ale_haskell_ghc_options = '-dynamic -fno-code'
