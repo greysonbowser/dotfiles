@@ -5,6 +5,14 @@ function fish_greeting
 
 end
 
+function tsend
+    tailscale file cp $argv iphone171: 
+end
+
+function tget
+    sudo tailscale file get ~/Downloads/tget
+end    
+
 function wttr
     set WTTR https://wttr.in/
     curl $WTTR$argv[1]
