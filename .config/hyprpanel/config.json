@@ -464,7 +464,7 @@
       ]
     }
   },
-  "bar.customModules.ram.labelType": "percentage",
+  "bar.customModules.ram.labelType": "free",
   "bar.customModules.ram.round": false,
   "theme.bar.buttons.modules.cpu.enableBorder": false,
   "bar.customModules.netstat.dynamicIcon": true,

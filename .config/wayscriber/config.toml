@@ -1,8 +1,8 @@
 [drawing]
 default_color = [
     255,
-    0,
-    0,
+    255,
+    255,
 ]
 default_thickness = 2.0
 default_eraser_size = 12.0
@@ -54,6 +54,7 @@ show_floating_badge_always = false
 show_frozen_badge = false
 status_bar_position = "top-right"
 help_overlay_context_filter = true
+show_capabilities_warning = true
 multi_monitor_enabled = true
 active_output_badge = true
 command_palette_toast_duration_ms = 1500
@@ -172,6 +173,8 @@ show_toast = true
 max_count = 9
 auto_create = true
 show_board_badge = true
+pan_enabled = true
+show_pan_badge = true
 persist_customizations = true
 default_board = "blackboard"
 
@@ -336,6 +339,7 @@ select_line_tool = []
 select_rect_tool = []
 select_ellipse_tool = []
 select_arrow_tool = []
+select_blur_tool = []
 select_highlight_tool = []
 toggle_highlight_tool = ["Ctrl+Alt+H"]
 increase_font_size = [

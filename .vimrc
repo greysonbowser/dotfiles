@@ -54,5 +54,9 @@ let g:vimtex_quickfix_open_on_warning = 0
 " Open ghcup in buffer
 nnoremap <Leader>g :GHCup<CR>
 
+" Run ALE diagnostics only for Haskell buffers.
+let g:ale_linters_explicit = 1
+let g:ale_linters = {'haskell': ['ghc']}
+
 " Prevents Haskell linter warnings, since ALE cannot read cabal config
 let g:ale_haskell_ghc_options = '-dynamic -fno-code'

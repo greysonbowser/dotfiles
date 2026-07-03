@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+notify() {
+    hyprctl notify -1 2500 "rgb(e0def4)" "$1" >/dev/null 2>&1 || true
+}
+
+get_clients() {
+    hyprctl clients -j 2>/dev/null || true
+}
+
+find_pip_client() {
+    jq -c '
+        def text($value): ($value // "" | tostring);
+
+        [
+            .[]
+            | select((.mapped // true) == true)
+            | select((.hidden // false) == false)
+            | select(
+                (text(.class) | test("^firefox$"; "i")) or
+                (text(.initialClass) | test("^firefox$"; "i"))
+            )
+            | select(
+                (text(.title) | test("Picture-in-Picture"; "i")) or
+                (text(.initialTitle) | test("Picture-in-Picture"; "i"))
+            )
+        ]
+        | sort_by(.focusHistoryID // 999999)
+        | .[0] // empty
+    '
+}
+
+active_window_is_firefox() {
+    local active_json
+
+    active_json="$(hyprctl activewindow -j 2>/dev/null || true)"
+    [[ -n "$active_json" ]] || return 1
+
+    jq -e '
+        def text($value): ($value // "" | tostring);
+
+        (text(.class) | test("^firefox$"; "i")) or
+        (text(.initialClass) | test("^firefox$"; "i"))
+    ' <<<"$active_json" >/dev/null
+}
+
+launch_firefox_pip() {
+    if ! command -v wtype >/dev/null 2>&1; then
+        notify "wtype not found"
+        exit 1
+    fi
+
+    if ! active_window_is_firefox; then
+        notify "Focus Firefox to launch PiP"
+        exit 1
+    fi
+
+    sleep 0.15
+    wtype -M ctrl -M shift -k bracketright
+}
+
+wait_for_pip_client() {
+    local clients_json
+    local client_json
+
+    for _ in {1..25}; do
+        clients_json="$(get_clients)"
+        [[ -n "$clients_json" ]] || {
+            sleep 0.1
+            continue
+        }
+
+        client_json="$(find_pip_client <<<"$clients_json")"
+        if [[ -n "$client_json" ]]; then
+            printf '%s\n' "$client_json"
+            return 0
+        fi
+
+        sleep 0.1
+    done
+
+    return 1
+}
+
+arrange_pip_client() {
+    local client_json="$1"
+    local address
+    local monitor_id
+    local floating
+    local pinned
+    local selector
+    local monitors_json
+    local monitor_geometry
+    local monitor_x
+    local monitor_y
+    local monitor_w
+    local monitor_h
+    local gap
+    local target_w
+    local target_h
+    local target_x
+    local target_y
+    local batch
+    local commands=()
+
+    address="$(jq -r '.address' <<<"$client_json")"
+    monitor_id="$(jq -r '.monitor' <<<"$client_json")"
+    floating="$(jq -r '.floating' <<<"$client_json")"
+    pinned="$(jq -r '.pinned' <<<"$client_json")"
+    selector="address:${address}"
+
+    monitors_json="$(hyprctl monitors -j 2>/dev/null || true)"
+    if [[ -z "$monitors_json" ]]; then
+        notify "PiP monitor not found"
+        exit 1
+    fi
+
+    monitor_geometry="$(
+        jq -r --argjson id "$monitor_id" '
+            .[]
+            | select(.id == $id)
+            | [.x, .y, .width, .height]
+            | @tsv
+        ' <<<"$monitors_json"
+    )"
+
+    if [[ -z "$monitor_geometry" ]]; then
+        notify "PiP monitor not found"
+        exit 1
+    fi
+
+    read -r monitor_x monitor_y monitor_w monitor_h <<<"$monitor_geometry"
+
+    gap=24
+    target_w=$((monitor_w * 30 / 100))
+    target_h=$((monitor_h * 30 / 100))
+    target_x=$((monitor_x + monitor_w - target_w - gap))
+    target_y=$((monitor_y + monitor_h - target_h - gap))
+
+    if [[ "$floating" != "true" ]]; then
+        commands+=("dispatch togglefloating ${selector}")
+    fi
+
+    commands+=("dispatch resizewindowpixel exact ${target_w} ${target_h},${selector}")
+    commands+=("dispatch movewindowpixel exact ${target_x} ${target_y},${selector}")
+
+    if [[ "$pinned" != "true" ]]; then
+        commands+=("dispatch pin ${selector}")
+    fi
+
+    commands+=("dispatch alterzorder top,${selector}")
+
+    batch="$(printf '%s;' "${commands[@]}")"
+    hyprctl --batch "$batch" >/dev/null
+}
+
+if ! command -v jq >/dev/null 2>&1; then
+    notify "jq not found"
+    exit 1
+fi
+
+clients_json="$(get_clients)"
+if [[ -z "$clients_json" ]]; then
+    notify "PiP window not found"
+    exit 1
+fi
+
+client_json="$(find_pip_client <<<"$clients_json")"
+
+if [[ -z "$client_json" ]]; then
+    launch_firefox_pip
+    client_json="$(wait_for_pip_client || true)"
+fi
+
+if [[ -z "$client_json" ]]; then
+    notify "PiP window not found"
+    exit 1
+fi
+
+arrange_pip_client "$client_json"

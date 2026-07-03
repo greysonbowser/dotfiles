@@ -6,11 +6,14 @@ function fish_greeting
 end
 
 function tsend
-    tailscale file cp $argv iphone171: 
+    set -l target (printf '%s\n' iphone171 ubuntu-4gb-hel1-1 iphone181 | fzf --prompt="Send to> " --height=~50% --layout=reverse)
+    or return 1
+    test -n "$target"; or return 1
+    sudo tailscale file cp $argv $target:
 end
 
 function tget
-    sudo tailscale file get ~/Downloads/tget
+    sudo tailscale file get --conflict=rename ~/Downloads/tget
 end    
 
 function wttr
@@ -87,37 +90,34 @@ function dots
 
     set extra_files \
         /home/grey/.config/MangoHud/MangoHud.conf \
-        /home/grey/.config/btop/btop.conf \
-        /home/grey/.config/kitty/kitty.conf.bak \
         /home/grey/.config/micro/bindings.json \
-        /home/grey/.config/micro/settings.json \
-        /home/grey/.config/qutebrowser/bookmarks/urls \
-        /home/grey/.config/qutebrowser/quickmarks
+        /home/grey/.config/micro/settings.json
+
+    # Patterns excluded from the directory mirroring below: app-generated
+    # backups, fish's machine-state var store, and systemd .wants symlinks.
+    set excludes \
+        --exclude '*.bak' \
+        --exclude 'fish_variables' \
+        --exclude '*.target.wants/'
 
     echo Copying dotfiles...
 
     mkdir -p $DOTS
 
     for path in $files
-        if test -f $path
-            cp $path $DOTS/
-        end
+        cp $path $DOTS/
     end
 
     for path in $dirs
-        if test -d $path
-            set rel (string replace -r '^/home/grey/' '' $path)
-            mkdir -p $DOTS/(dirname $rel)
-            rsync -a --delete $path/ $DOTS/$rel/
-        end
+        set rel (string replace -r '^/home/grey/' '' $path)
+        mkdir -p $DOTS/(dirname $rel)
+        rsync -a --delete $excludes $path/ $DOTS/$rel/
     end
 
     for path in $extra_files
-        if test -f $path
-            set rel (string replace -r '^/home/grey/' '' $path)
-            mkdir -p $DOTS/(dirname $rel)
-            cp $path $DOTS/$rel
-        end
+        set rel (string replace -r '^/home/grey/' '' $path)
+        mkdir -p $DOTS/(dirname $rel)
+        cp $path $DOTS/$rel
     end
 
     if not test -d $DOTS/.git
@@ -140,11 +140,6 @@ end
 function mmrun
     set PROJECT /home/grey/megaminx-viewer
 
-    if not test -d $PROJECT
-        echo "Project directory not found: $PROJECT"
-        return 1
-    end
-
     cd $PROJECT; and cmake --build build; and begin
         ./build/megaminx_viewer data/megaminx_spec.json > /tmp/megaminx-viewer.log 2>&1 &
         disown
@@ -154,3 +149,7 @@ end
 source ~/.config/fish/gambitbot.fish
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin $PATH /home/grey/.ghcup/bin # ghcup-env
+
+function dic-lookup
+    ~/dic/target/release/dic
+end    
