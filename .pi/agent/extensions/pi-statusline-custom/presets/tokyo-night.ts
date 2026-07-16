@@ -18,7 +18,7 @@ const TOKYO_NIGHT_COLORS = {
 	lead: "#c4a7e7", // iris
 	header: { fg: "#191724", bg: "#c4a7e7" }, // base on iris
 	directory: { fg: "#191724", bg: "#ebbcba" }, // base on rose
-	git: { fg: "#e0def4", bg: "#31748f" }, // text on pine
+	git: { fg: "#191724", bg: "#f6c177" }, // base on gold, avoids Rosé Pine pine/blue
 	runtime: { fg: "#e0def4", bg: "#26233a" }, // text on overlay
 	meter: { fg: "#e0def4", bg: "#403d52" }, // text on highlightMed
 	extensionSeparator: "#c4a7e7",
