@@ -1,12 +1,30 @@
 source /usr/share/cachyos-fish-config/cachyos-config.fish
 
-function fish_greeting
+function cmd
+       pi \
+           --no-tools \
+           --no-session \
+           --no-context-files \
+           --no-skills \
+           --no-prompt-templates \
+           --no-extensions \
+           --system-prompt 'Output only the requested shell command and nothing else. Assume fish syntax unless otherwise stated.' \
+           -p (string join ' ' -- $argv)
+   end
+
+function quickprompt
+       pi --no-tools --no-session \
+           --system-prompt 'Output only the requested shell command and nothing else. Assume fish syntax unless otherwise stated' \
+           -p (string join ' ' -- $argv)
+   end
+
+   function fish_greeting
     echo Local time is (set_color purple)(date +%T)(set_color normal) System uptime: (set_color red)(uptime -p)(set_color normal)
 
 end
 
 function tsend
-    set -l target (printf '%s\n' iphone171 ubuntu-4gb-hel1-1 iphone181 | fzf --prompt="Send to> " --height=~50% --layout=reverse)
+    set -l target (printf '%s\n' iphone171 ubuntu-4gb-hel1-1 iphone181 jasmines-macbook-pro | fzf --prompt="Send to> " --height=~50% --layout=reverse)
     or return 1
     test -n "$target"; or return 1
     sudo tailscale file cp $argv $target:
@@ -86,7 +104,8 @@ function dots
         /home/grey/.config/kitty \
         /home/grey/.config/systemd/user \
         /home/grey/.config/vicinae \
-        /home/grey/.config/wayscriber
+        /home/grey/.config/wayscriber \
+        /home/grey/.pi/agent/extensions/pi-statusline-custom
 
     set extra_files \
         /home/grey/.config/MangoHud/MangoHud.conf \
