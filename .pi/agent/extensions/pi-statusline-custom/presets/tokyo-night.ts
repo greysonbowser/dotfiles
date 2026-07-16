@@ -14,13 +14,14 @@ interface BlockColors {
 }
 
 const TOKYO_NIGHT_COLORS = {
-	lead: "#a3aed2",
-	header: { fg: "#090c0c", bg: "#a3aed2" },
-	directory: { fg: "#e3e5e5", bg: "#769ff0" },
-	git: { fg: "#769ff0", bg: "#394260" },
-	runtime: { fg: "#769ff0", bg: "#212736" },
-	meter: { fg: "#a0a9cb", bg: "#1d2230" },
-	extensionSeparator: "#394260",
+	// Custom local theme: Rosé Pine, matching ~/.config/hypr/rose-pine.lua.
+	lead: "#c4a7e7", // iris
+	header: { fg: "#191724", bg: "#c4a7e7" }, // base on iris
+	directory: { fg: "#191724", bg: "#ebbcba" }, // base on rose
+	git: { fg: "#e0def4", bg: "#31748f" }, // text on pine
+	runtime: { fg: "#e0def4", bg: "#26233a" }, // text on overlay
+	meter: { fg: "#e0def4", bg: "#403d52" }, // text on highlightMed
+	extensionSeparator: "#c4a7e7",
 } as const satisfies Record<string, string | BlockColors>;
 
 const TOKYO_NIGHT_BLOCK_ORDER: TokyoNightBlockName[] = [
@@ -41,7 +42,8 @@ export function tokyoNightExtensionSeparator(_theme: Theme): string {
 
 function joinTokyoNightSegments(segments: RenderSegment[]): string {
 	const blocks = groupTokyoNightBlocks(segments);
-	let line = ansiFg(TOKYO_NIGHT_COLORS.lead, "░▒▓");
+	const firstBlock = blocks.at(0);
+	let line = firstBlock ? ansiFg(getTokyoNightBlockColors(firstBlock.name).bg, "") : "";
 
 	for (const [index, block] of blocks.entries()) {
 		const colors = getTokyoNightBlockColors(block.name);

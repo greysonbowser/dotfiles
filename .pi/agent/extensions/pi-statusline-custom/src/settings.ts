@@ -7,7 +7,7 @@ import type { SegmentName, StatuslineConfig, StatuslinePresetName } from "../pre
 
 const SETTINGS_FILE = "pi-statusline.json";
 const LEGACY_SETTINGS_FILE = "pi-statusline-settings.json";
-const DEFAULT_PRESET: StatuslinePresetName = "classic";
+const DEFAULT_PRESET: StatuslinePresetName = "tokyo-night";
 const DEFAULT_SEGMENTS: SegmentName[] = [
 	"brand",
 	"model",
@@ -29,9 +29,9 @@ export interface StatuslineSettings {
 export function createDefaultConfig(): StatuslineConfig {
 	return {
 		preset: readStatuslinePreset(),
-		palette: "mono",
+		palette: "candy",
 		density: "compact",
-		separator: "bar",
+		separator: "dot",
 		showLabels: false,
 		segments: [...DEFAULT_SEGMENTS],
 		extensionStatusIcons: readStatuslineSettings().extensionStatusIcons,

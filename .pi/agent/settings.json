@@ -1,0 +1,24 @@
+{
+    "lastChangelogVersion": "0.80.7",
+    "theme": "rose-pine",
+    "defaultProvider": "openai-codex",
+    "defaultModel": "gpt-5.5",
+    "defaultThinkingLevel": "high",
+    "terminal": {
+        "showTerminalProgress": true
+    },
+    "showCacheMissNotices": true,
+    "enableInstallTelemetry": false,
+    "doubleEscapeAction": "fork",
+    "compaction": {
+        "enabled": true
+    },
+    "packages": [
+        "npm:pi-web-access",
+        "npm:@tintinweb/pi-subagents",
+        "npm:@juicesharp/rpiv-ask-user-question",
+        "npm:pi-btw",
+        "npm:@narumitw/pi-caffeinate",
+        "npm:@narumitw/pi-plan-mode"
+    ]
+}

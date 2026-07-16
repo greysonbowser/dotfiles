@@ -105,12 +105,14 @@ function dots
         /home/grey/.config/systemd/user \
         /home/grey/.config/vicinae \
         /home/grey/.config/wayscriber \
-        /home/grey/.pi/agent/extensions/pi-statusline-custom
+        /home/grey/.pi/agent/extensions/pi-statusline-custom \
+        /home/grey/.pi/agent/themes
 
     set extra_files \
         /home/grey/.config/MangoHud/MangoHud.conf \
         /home/grey/.config/micro/bindings.json \
-        /home/grey/.config/micro/settings.json
+        /home/grey/.config/micro/settings.json \
+        /home/grey/.pi/agent/settings.json
 
     # Patterns excluded from the directory mirroring below: app-generated
     # backups, fish's machine-state var store, and systemd .wants symlinks.
