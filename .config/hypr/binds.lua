@@ -32,6 +32,10 @@ hl.bind(mainMod .. " + space",  hl.dsp.exec_cmd(menu .. " toggle"))
 hl.bind(mainMod .. " + W",      hl.dsp.exec_cmd("pkill -SIGUSR1 wayscriber"))
 hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd("fish -lc dic-lookup"))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("pidof hyprlock || hyprlock"))
+-- Flipper BadUSB dispatcher: runs the command the Flipper types
+hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd([[kitty --class flipperpad bash -c 'read -t 5 -r cmd && eval "$cmd"']]))
+-- Show output of the last Flipper dispatcher run
+hl.bind(mainMod .. " + ALT + O", hl.dsp.exec_cmd([[kitty sh -c 'less ~/.local/state/flipper/last.log']]))
 hl.bind(mainMod .. " + N",      hl.dsp.exec_cmd([[sh -c '
 f=/tmp/hyprsunset-stage
 s=$(cat "$f" 2>/dev/null || echo 0)

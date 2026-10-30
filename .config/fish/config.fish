@@ -94,14 +94,15 @@ function dots
     set DOTS /home/grey/dotfiles
 
     set files \
+        /home/grey/.bashrc \
         /home/grey/.tmux.conf \
         /home/grey/.vimrc
 
     set dirs \
         /home/grey/.config/fish \
         /home/grey/.config/hypr \
-        /home/grey/.config/hyprpanel \
         /home/grey/.config/kitty \
+        /home/grey/.config/noctalia \
         /home/grey/.config/systemd/user \
         /home/grey/.config/vicinae \
         /home/grey/.config/wayscriber \
@@ -110,8 +111,13 @@ function dots
 
     set extra_files \
         /home/grey/.config/MangoHud/MangoHud.conf \
+        /home/grey/.config/fastfetch/config.jsonc \
         /home/grey/.config/micro/bindings.json \
         /home/grey/.config/micro/settings.json \
+        /home/grey/.config/sdrpp/config.json \
+        /home/grey/.config/sdrpp/radio_config.json \
+        /home/grey/.config/spotatui/config.yml \
+        /home/grey/.config/zathura/zathurarc \
         /home/grey/.pi/agent/settings.json
 
     # Patterns excluded from the directory mirroring below: app-generated
@@ -119,7 +125,8 @@ function dots
     set excludes \
         --exclude '*.bak' \
         --exclude 'fish_variables' \
-        --exclude '*.target.wants/'
+        --exclude '*.target.wants/' \
+        --exclude '.hyprland.conf'
 
     echo Copying dotfiles...
 
@@ -144,6 +151,8 @@ function dots
     if not test -d $DOTS/.git
         git -C $DOTS init
     end
+
+    rm -rf $DOTS/.config/hyprpanel
 
     cd $DOTS
     git add --all
@@ -174,3 +183,10 @@ set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; se
 function dic-lookup
     ~/dic/target/release/dic
 end    
+
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'micromamba shell init' !!
+set -gx MAMBA_EXE "/usr/bin/micromamba"
+set -gx MAMBA_ROOT_PREFIX "/home/grey/.local/share/mamba"
+$MAMBA_EXE shell hook --shell fish --root-prefix $MAMBA_ROOT_PREFIX | source
+# <<< mamba initialize <<<

@@ -1,0 +1,44 @@
+[wallpaper]
+enabled = false
+
+[lockscreen]
+enabled = false
+
+[nightlight]
+enabled = false
+
+[idle.behavior.lock]
+enabled = false
+[idle.behavior.screen-off]
+enabled = false
+[idle.behavior.lock-and-suspend]
+enabled = false
+
+[shell]
+polkit_agent = false
+
+[weather]
+enabled = false
+
+[theme]
+source         = "custom"
+custom_palette = "rose-pine"
+builtin        = "Rosé Pine"
+
+[bar.default]
+start  = ["workspaces"]
+center = ["clock"]
+end    = [
+    "media",
+    "cpu",
+    "ram",
+    "tray",
+    "notifications",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "control-center",
+    "session",
+]
