@@ -102,6 +102,7 @@ function dots
         /home/grey/.config/fish \
         /home/grey/.config/hypr \
         /home/grey/.config/kitty \
+        /home/grey/.config/mullvad-tailscale \
         /home/grey/.config/noctalia \
         /home/grey/.config/systemd/user \
         /home/grey/.config/vicinae \
