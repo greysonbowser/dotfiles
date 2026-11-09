@@ -1,0 +1,9 @@
+# Allows tailnet (100.64.0.0/10) traffic to bypass Mullvad tunnel
+table inet mullvad-tailscale {}
+flush table inet mullvad-tailscale
+table inet mullvad-tailscale {
+  chain out {
+    type route hook output priority -100; policy accept;
+    ip daddr 100.64.0.0/10 ip daddr != 100.64.0.0/24 ct mark set 0x00000f41 meta mark set 0x6d6f6c65
+  }
+}

@@ -1,0 +1,12 @@
+# Loads /etc/mullvad-tailscale.nft at boot so tailnet traffic skips the Mullvad tunnel.
+[Unit]
+Description=Route tailnet traffic around the Mullvad tunnel
+After=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nft -f /etc/mullvad-tailscale.nft
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
